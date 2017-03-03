@@ -73,11 +73,8 @@ func (h *wercHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	var err error
-	r.Host, _, err = net.SplitHostPort(r.Host)
-	if err != nil {
-		http.Error(w, "internal server error", http.StatusInternalServerError)
-		return
+	if h, _, err := net.SplitHostPort(r.Host); err == nil {
+		r.Host = h
 	}
 	fn := filepath.Join(h.root, "sites", r.Host, r.URL.Path)
 	if fi, err := os.Stat(fn); err == nil && !fi.IsDir() {
