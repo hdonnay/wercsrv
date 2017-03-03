@@ -1,0 +1,6 @@
+Wercsrv is a simple go http server to use for serving werc-driven sites.
+
+To use, run in a werc root or provide a "root" argument. The address to
+serve HTTP on is set by and argument to the "addr" flag.
+
+To set up werc, see the werc homepage: http://werc.cat-v.org
