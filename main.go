@@ -27,6 +27,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -67,17 +68,16 @@ type wercHandler struct {
 }
 
 func (h *wercHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	for _, p := range strings.Split(r.URL.Path, "/") {
-		if p == "_werc" {
-			http.NotFound(w, r)
-			return
-		}
+	if strings.HasSuffix(r.URL.Path, "_werc/config") {
+		http.Error(w, "", http.StatusUnauthorized)
+		return
 	}
 	if h, _, err := net.SplitHostPort(r.Host); err == nil {
 		r.Host = h
 	}
 	fn := filepath.Join(h.root, "sites", r.Host, r.URL.Path)
 	if fi, err := os.Stat(fn); err == nil && !fi.IsDir() {
+		w.Header().Set("ETag", fi.ModTime().Format(time.RFC3339))
 		http.ServeFile(w, r, fn)
 		return
 	}
