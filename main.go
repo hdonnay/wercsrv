@@ -27,7 +27,6 @@ import (
 	"os/signal"
 	"path/filepath"
 	"strings"
-	"time"
 )
 
 func main() {
@@ -78,7 +77,6 @@ func (h *wercHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	fn := filepath.Join(h.root, "sites", r.Host, r.URL.Path)
 	if fi, err := os.Stat(fn); err == nil && !fi.IsDir() {
-		w.Header().Set("ETag", fi.ModTime().Format(time.RFC3339))
 		http.ServeFile(w, r, fn)
 		return
 	}
