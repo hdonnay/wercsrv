@@ -49,7 +49,8 @@ func main() {
 	}
 
 	go func() {
-		fmt.Fprintf(os.Stderr, "# using werc at %q\n", root)
+		fmt.Fprintf(os.Stderr, "# using werc at %s\n", root)
+		fmt.Fprintf(os.Stderr, "# listening on %s\n", *addr)
 		if err := srv.ListenAndServe(); err != nil {
 			fmt.Fprintln(os.Stderr, "!", err)
 		}
